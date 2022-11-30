@@ -21,7 +21,7 @@
     height: calc(100vh - 115px);
 }
 
-/* App Rules */
+/* Container Centrale */
 .container{
     position: absolute;
     top: 50%;
@@ -34,16 +34,50 @@
     border: 5px solid black;
 }
 
+/* Sezione Sinistra */
 .left{
-    width: 30%;
+    width: 35%;
     height: 100%;
     /* DEBUG */
     background-color: blue;
 }
 
+    .left header{
+        height: 60px;
+        /* DEBUG */
+        background-color: chartreuse;
+    }
+
+    .left .notification{
+        height: 70px;
+        /* DEBUG */
+        background-color: brown;
+    }
+
+    .left .search{
+        height: 40px;
+        /* DEBUG */
+        background-color: chocolate;
+    }
+
+    .left .chats{
+        height: calc(100% - 170px);
+        /* DEBUG */
+        background-color: aqua;
+    }
+
+        .left .chat{
+            height: 70px;
+            /* DEBUG */
+            border: 2px solid black;
+        }
+
 .right{
-    width: 70%;
+    width: 65%;
     height: 100%;
     /* DEBUG */
     background-color: blueviolet;
 }
+
+
+
