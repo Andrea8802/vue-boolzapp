@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="search">
-                        <input type="search" name="search-contacts" id="search-contacts" placeholder="Cerca o inizia una nuova chat">
+                        <input type="search" id="search-contacts" placeholder="Cerca o inizia una nuova chat">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
 
@@ -78,17 +78,46 @@
     
                 <!-- Sezione Destra -->
                 <section class="right">
-                    <header></header>
+                    <header>
+                        <div class="info-chat">
+                            <div class="image-contact">
+                                <img src="img/avatar_1.jpg" alt="Contact Image Profile 1" class="image-profile">
+                            </div>
+                            <div class="name-contact">
+                                <div class="name">Michele</div>
+                                <div class="text-message">Ultimo accesso oggi alle 12:00</div>
+                            </div>
+                        </div>
+                        <div class="tool">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i class="fa-solid fa-paperclip"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                    </header>
 
                     <div class="messages">
 
-                        <div class="message sent"></div>
-                        <div class="message sent"></div>
-                        <div class="message received"></div>
+                        <div class="message sent">
+                            Hai portato a spasso il cane?
+                            <div class="time">15:30</div>
+                        </div>
+                        <div class="message sent">
+                            Ricordati di stendere i panni
+                            <div class="time">15:30</div>
+                        </div>
+                        <div class="message received">
+                            Tutto fatto!
+                            <div class="time">16:15</div>
+                        </div>
 
                     </div>
 
-                    <div class="input-bar"></div>
+                    <div class="input-section">
+                        <i class="fa-regular fa-face-smile"></i>
+                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio">
+                        <i class="fa-solid fa-microphone"></i>
+
+                    </div>
                 </section>
             </div>
     
