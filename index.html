@@ -57,7 +57,7 @@
 
                     <div class="chats">
 
-                        <div v-for="(chat, index) in contacts" class="chat" @click="contactSelected(index)">
+                        <div v-for="(chat, index) in contacts" :class="this.contacts[index].selected ? selectedClass : '' " class="chat" @click="contactSelected(index)">
                             <div class="image-contact">
                                 <img :src=" 'img/avatar' + contacts[index].avatar + '.jpg' " alt="Contact Image Profile 1" class="image-profile">
                             </div>
@@ -97,8 +97,11 @@
 
                     <div class="messages">
 
-                        <div v-for="text in messageChat" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'box-message' ">
+                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
                                 {{text.message}}
+                            </div>
+                                
 
                         </div>
                         

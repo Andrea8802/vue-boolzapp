@@ -166,17 +166,33 @@ createApp({
                     ],
                 }
             ],
-            
-            messageChat : []
+
+            messageChat : [],
+            selectedClass : "selectedContact",
+            hidden: "box-message",
+            nVisibileChat : 0
 
         }
     },
     methods:{
         contactSelected(i){
-            this.messageChat = [];
-            this.contacts[i].messages.forEach(element => {
-                this.messageChat.push(element)
+            // Impostiamo a tutti una flag per verificare se è selezionato
+            this.contacts.forEach(element => {
+                element.selected = false;
             });
+            
+            this.contacts[i].selected = true;
         }
+    },
+    mounted(){
+
+        for (let i = 0; i < this.contacts.length; i++) {
+            this.messageChat.push(this.contacts[i].messages)  
+        }
+
+        this.contacts[0].selected = true;
+
+        this.nVisibileChat
     }
+
 }).mount("#app");

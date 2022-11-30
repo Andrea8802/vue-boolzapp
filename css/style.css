@@ -166,8 +166,13 @@ body{
             display: flex;
             justify-content: flex-start;
             gap: 10px;
+            cursor: pointer;
 
         }
+
+            .left .chat:hover{
+                background-color: #eaeaea;
+            }
 
             .left .name-contact{
                 margin-top: 8px;
@@ -181,7 +186,13 @@ body{
                 font-size: 12px;
                 
             }        
+    .left .selectedContact{
+        background-color: lightgray;
+    }
 
+        .left .selectedContact:hover{
+            background-color: #cacaca;
+        }
 
 /* Sezione Destra */
 .right{
@@ -213,38 +224,44 @@ body{
         background-image: url("../img/mine.jpg");
     }
 
-        .right .message{
-            min-height: 40px;
-            width: 250px;
-            border-radius: 8px;
-            clear: both;
-            padding: 0 15px;
-            margin: 5px;
-            font-size: 12px;
-            position: relative;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            word-break: break-all;
+        .right .messages .box-message{
+            display: none;
         }
 
-            .right .message.sent{
-                background-color: #d5f9ba;
-                float: right;
+            .right .message{
+                min-height: 40px;
+                width: 250px;
+                border-radius: 8px;
+                clear: both;
+                padding: 0 15px;
+                margin: 5px;
+                font-size: 12px;
+                position: relative;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                word-break: break-all;
             }
 
-            .right .message.received{
-                background-color: white;
-                float: left;
-            }
-
-                .right .message .time{
-                    position: absolute;
-                    bottom: 5px;
-                    right: 7px;
-                    color: gray;
-                    font-size: 8px;
+                .right .message.sent{
+                    background-color: #d5f9ba;
+                    float: right;
                 }
+
+                .right .message.received{
+                    background-color: white;
+                    float: left;
+                }
+
+                    .right .message .time{
+                        position: absolute;
+                        bottom: 5px;
+                        right: 7px;
+                        color: gray;
+                        font-size: 8px;
+                    }
+
+       
 
     .right .input-section{
         height: 60px;
