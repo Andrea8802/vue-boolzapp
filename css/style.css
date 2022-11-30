@@ -5,6 +5,10 @@
     padding: 0;
 }
 
+body{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Background Rules */
 .background{
     position: relative;
@@ -44,14 +48,37 @@
 
     .left header{
         height: 60px;
-        /* DEBUG */
-        background-color: chartreuse;
+        background-color: #eaeaea;
+        padding: 0 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
+
+        .profile{
+            height: 100%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+            .left .profile .image-profile{
+                height: 70%;
+                border-radius: 50%;
+            }
+
+        .left .tool{
+            display: flex;
+            justify-content: space-evenly;
+            gap: 15px;
+            color: gray;
+            font-size: 20px;
+        }
 
     .left .notification{
         height: 70px;
-        /* DEBUG */
-        background-color: brown;
+        background-color: #8edafc;
+        display: flex;
     }
 
     .left .search{

@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Style CSS -->
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
     <title>Boolzapp</title>
 </head>
@@ -23,9 +27,24 @@
 
                 <!-- Sezione sinistra -->
                 <section class="left">
-                    <header></header>
+                    
+                    <header>
+                        <div class="profile">
+                            <img src="img/avatar_io.jpg" alt="Image Profile" class="image-profile">
+                            <span class="profile-name">Sofia</span>
+                        </div>
 
-                    <div class="notification"></div>
+                        <div class="tool">
+                            <i class="fa-solid fa-circle-notch"></i>
+                            <i class="fa-solid fa-message"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+
+                    </header>
+
+                    <div class="notification">
+                        <i class="fa-solid fa-bell-slash"></i>
+                    </div>
 
                     <div class="search"></div>
 
@@ -61,7 +80,8 @@
         </div>
     </div>
 
-
+    
+    <!-- Script: Vue.js & main.js -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
