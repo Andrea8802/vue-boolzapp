@@ -170,7 +170,9 @@ createApp({
             messageChat : [],
             selectedClass : "selectedContact",
             hidden: "box-message",
-            nVisibileChat : 0
+            imgSelected: "",
+            nameSelected : "",
+            textUser : ""
 
         }
     },
@@ -181,18 +183,47 @@ createApp({
                 element.selected = false;
             });
             
+            // Impostiamo su true la chat selezionata e mostriamo i messaggi
             this.contacts[i].selected = true;
+
+            this.imgSelected =  "img/avatar" + this.contacts[i].avatar + ".jpg";
+
+            this.nameSelected = this.contacts[i].name;
+            
+        },
+
+        textSended(){
+            let genDate = new Date()
+            let dataInvio = `${genDate.getDay()}/${genDate.getMonth()}/${genDate.getFullYear()} ${genDate.getHours()}:${genDate.getMinutes()}:${genDate.getSeconds()}`
+
+            this.contacts.forEach(element => {
+                if (element.selected){
+                    element.messages.push({date:dataInvio, message: this.textUser, status: "sent"});
+
+                    setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000)
+                    document.querySelector(".messages").scrollBy(0, 100);
+                }
+            });
+            
+            this.textUser = "";
         }
+
+
     },
     mounted(){
-
+        
+        // Ciclo per mandare nell'html un array con solo i dati che servono
         for (let i = 0; i < this.contacts.length; i++) {
             this.messageChat.push(this.contacts[i].messages)  
         }
 
+        // Impostiamo la prima chat come attiva
         this.contacts[0].selected = true;
 
-        this.nVisibileChat
+        this.imgSelected =  "img/avatar" + this.contacts[0].avatar + ".jpg";
+
+        this.nameSelected = this.contacts[0].name;
+
     }
 
 }).mount("#app");

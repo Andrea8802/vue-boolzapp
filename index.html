@@ -81,10 +81,10 @@
                     <header>
                         <div class="info-chat">
                             <div class="image-contact">
-                                <img src="img/avatar_1.jpg" alt="Contact Image Profile 1" class="image-profile">
+                                <img :src="imgSelected" alt="Contact Image Profile 1" class="image-profile">
                             </div>
                             <div class="name-contact">
-                                <div class="name">Michele</div>
+                                <div class="name">{{ nameSelected }}</div>
                                 <div class="text-message">Ultimo accesso oggi alle 12:00</div>
                             </div>
                         </div>
@@ -98,19 +98,22 @@
                     <div class="messages">
 
                         <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'box-message' ">
-                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                            <div v-for="text in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
                                 {{text.message}}
+
+                                <div class="time">
+                                    {{text.date}}
+                                </div> 
                             </div>
                                 
-
                         </div>
                         
 
                     </div>
-                    <!-- <div class="time">15:30</div>  -->
+                    
                     <div class="input-section">
                         <i class="fa-regular fa-face-smile"></i>
-                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio">
+                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio" v-model="textUser" @KeyUp.enter="textSended">
                         <i class="fa-solid fa-microphone"></i>
 
                     </div>
