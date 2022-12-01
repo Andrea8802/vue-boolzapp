@@ -174,10 +174,13 @@ createApp({
             nameSelected : "",
             textUser : "",
             searchContacts: "",
-            hour: ""
+            hour: [],
+            lastAccess: ""
         }
     },
     methods:{
+
+        // Contatto selezionato
         contactSelected(i){
             // Impostiamo a tutti una flag per verificare se è selezionato
             this.contacts.forEach(element => {
@@ -187,17 +190,22 @@ createApp({
             // Impostiamo su true la chat selezionata e mostriamo i messaggi
             this.contacts[i].selected = true;
 
+            // Impostiamo l'immagine al cambio contatto
             this.imgSelected =  "img/avatar" + this.contacts[i].avatar + ".jpg";
 
+            // Impostiamo il nome al cambio contatto
             this.nameSelected = this.contacts[i].name;
+
+            this.lastAccess = this.hour[i];
             
         },
 
+        // Messaggio inviato
         textSended(){
+            
+            // Settiamo la data e l'ora
             let genDate = new Date()
             let dataInvio = `${genDate.getDay()}/${genDate.getMonth()}/${genDate.getFullYear()} ${genDate.getHours()}:${genDate.getMinutes()}:${genDate.getSeconds()}`
-
-            let timeSent = `${genDate.getHours()}:${genDate.getMinutes}`
 
             this.contacts.forEach(element => {
                 if (element.selected){
@@ -205,16 +213,14 @@ createApp({
 
                     setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000);
 
-                    this.hour = `${genDate.getHours()}:${genDate.getMinutes()}`
-                    console.log(this.hour);
+                    this.lastAccess = `${genDate.getHours()}:${genDate.getMinutes()}`
                 }
             });
-            
-
             
             this.textUser = "";
         },
 
+        // Cerca contatto
         searchingContacts(){
             this.contacts.forEach(element => {
                 if (element.name.toLowerCase().includes(this.searchContacts.toLowerCase())){
@@ -233,10 +239,6 @@ createApp({
         // Ciclo per mandare nell'html un array con solo i dati che servono
         for (let i = 0; i < this.contacts.length; i++) {
             this.messageChat.push(this.contacts[i].messages)  
-
-            this.contacts[i].messages.forEach(element => {
-                this.hour = element.date
-            });
         }
 
         // Impostiamo la prima chat come attiva
@@ -244,9 +246,15 @@ createApp({
 
         this.imgSelected =  "img/avatar" + this.contacts[0].avatar + ".jpg";
 
-        this.nameSelected = this.contacts[0].name;
 
-        
+        this.nameSelected = this.contacts[0].name;
+        let lunghezza
+        this.contacts.forEach(element => {
+           lunghezza = element.messages.length
+            this.hour.push(element.messages[lunghezza - 1].date)
+        });
+
+        this.lastAccess = this.hour[0];
 
     }
 

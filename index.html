@@ -63,12 +63,12 @@
                             </div>
 
                             <div class="name-contact">
-                                <div class="name">{{ contacts[index].name }}</div>
+                                <div class="name">{{ chat.name }}</div>
                                 <div class="text-message">Ultimo messaggio inviato</div>
                             </div>
 
                             <div class="time">
-                                {{hour}}
+                                {{ hour[index] }}
                             </div>
                         </div>
 
@@ -85,7 +85,7 @@
                             </div>
                             <div class="name-contact">
                                 <div class="name">{{ nameSelected }}</div>
-                                <div class="text-message">Ultimo accesso oggi alle 12:00</div>
+                                <div class="text-message">Ultimo accesso oggi alle {{ lastAccess }}</div>
                             </div>
                         </div>
                         <div class="tool">
