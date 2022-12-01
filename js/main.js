@@ -206,15 +206,19 @@ createApp({
             // Settiamo la data e l'ora
             let genDate = new Date()
             let dataInvio = `${genDate.getDay()}/${genDate.getMonth()}/${genDate.getFullYear()} ${genDate.getHours()}:${genDate.getMinutes()}:${genDate.getSeconds()}`
-
-            this.contacts.forEach(element => {
+            let orarioInvio = `${genDate.getHours()}:${genDate.getMinutes()}`
+            this.lastAccess = orarioInvio;
+            
+            this.contacts.forEach((element, index) => {
                 if (element.selected){
-                    element.messages.push({date:dataInvio, message: this.textUser, status: "sent"});
+                    element.messages.push({date:orarioInvio, message: this.textUser, status: "sent"});
+                    setTimeout(()=> element.messages.push({date:orarioInvio, message: "ok", status: "received"}), 1000);
 
-                    setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000);
+                    this.hour.splice([index], 1, this.lastAccess);
 
-                    this.lastAccess = `${genDate.getHours()}:${genDate.getMinutes()}`
                 }
+                document.querySelector(".messages").scrollBy(0, 200);
+
             });
             
             this.textUser = "";
@@ -234,7 +238,7 @@ createApp({
         }
 
     },
-    mounted(){
+    mounted(){ 
         
         // Ciclo per mandare nell'html un array con solo i dati che servono
         for (let i = 0; i < this.contacts.length; i++) {
