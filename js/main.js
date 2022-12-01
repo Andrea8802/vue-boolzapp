@@ -200,13 +200,13 @@ createApp({
                 if (element.selected){
                     element.messages.push({date:dataInvio, message: this.textUser, status: "sent"});
 
-                    setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000)
-                    document.querySelector(".messages").scrollBy(0, 100);
+                    setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000);
                 }
             });
+
             
             this.textUser = "";
-        }
+        },
 
 
     },
