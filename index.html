@@ -95,7 +95,7 @@
                         </div>
                     </header>
 
-                    <div class="messages" @scroll.passive="scrollMessage">
+                    <div class="messages">
 
                         <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'box-message' ">
                             <div v-for="text in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
