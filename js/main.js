@@ -172,8 +172,9 @@ createApp({
             hidden: "box-message",
             imgSelected: "",
             nameSelected : "",
-            textUser : ""
-
+            textUser : "",
+            searchContacts: "",
+            hour: ""
         }
     },
     methods:{
@@ -196,18 +197,38 @@ createApp({
             let genDate = new Date()
             let dataInvio = `${genDate.getDay()}/${genDate.getMonth()}/${genDate.getFullYear()} ${genDate.getHours()}:${genDate.getMinutes()}:${genDate.getSeconds()}`
 
+            let timeSent = `${genDate.getHours()}:${genDate.getMinutes}`
+
             this.contacts.forEach(element => {
                 if (element.selected){
                     element.messages.push({date:dataInvio, message: this.textUser, status: "sent"});
 
                     setTimeout(()=> element.messages.push({date:dataInvio, message: "ok", status: "received"}), 1000);
+
+                    this.hour = `${genDate.getHours()}:${genDate.getMinutes()}`
+                    console.log(this.hour);
                 }
             });
+            
 
             
             this.textUser = "";
         },
 
+        searchingContacts(){
+            this.contacts.forEach(element => {
+                if (element.name.toLowerCase().includes(this.searchContacts.toLowerCase())){
+                    element.visible = true;
+
+
+                } else if(element.name.toLowerCase() === this.searchContacts.toLowerCase()){
+
+                } else {
+                    element.visible = false;
+
+                }
+            });
+        }
 
     },
     mounted(){
@@ -215,6 +236,11 @@ createApp({
         // Ciclo per mandare nell'html un array con solo i dati che servono
         for (let i = 0; i < this.contacts.length; i++) {
             this.messageChat.push(this.contacts[i].messages)  
+
+            this.contacts[i].messages.forEach(element => {
+                this.hour = element.date
+                console.log(this.hour);
+            });
         }
 
         // Impostiamo la prima chat come attiva
@@ -223,6 +249,8 @@ createApp({
         this.imgSelected =  "img/avatar" + this.contacts[0].avatar + ".jpg";
 
         this.nameSelected = this.contacts[0].name;
+
+        
 
     }
 

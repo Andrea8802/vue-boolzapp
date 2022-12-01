@@ -51,13 +51,13 @@
                     </div>
 
                     <div class="search">
-                        <input type="search" id="search-contacts" placeholder="Cerca o inizia una nuova chat">
+                        <input type="search" id="search-contacts" placeholder="Cerca o inizia una nuova chat" v-model="searchContacts" @KeyUp="searchingContacts">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
 
                     <div class="chats">
 
-                        <div v-for="(chat, index) in contacts" :class="this.contacts[index].selected ? selectedClass : '' " class="chat" @click="contactSelected(index)">
+                        <div v-for="(chat, index) in contacts" :class="contacts[index].selected ? selectedClass : '' " :id="contacts[index].visible ? '' : 'hidden' " class="chat" @click="contactSelected(index)">
                             <div class="image-contact">
                                 <img :src=" 'img/avatar' + contacts[index].avatar + '.jpg' " alt="Contact Image Profile 1" class="image-profile">
                             </div>
@@ -68,7 +68,7 @@
                             </div>
 
                             <div class="time">
-                                12:00
+                                {{hour}}
                             </div>
                         </div>
 
