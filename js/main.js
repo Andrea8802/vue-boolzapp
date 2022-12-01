@@ -220,9 +220,6 @@ createApp({
                 if (element.name.toLowerCase().includes(this.searchContacts.toLowerCase())){
                     element.visible = true;
 
-
-                } else if(element.name.toLowerCase() === this.searchContacts.toLowerCase()){
-
                 } else {
                     element.visible = false;
 
@@ -239,7 +236,6 @@ createApp({
 
             this.contacts[i].messages.forEach(element => {
                 this.hour = element.date
-                console.log(this.hour);
             });
         }
 
