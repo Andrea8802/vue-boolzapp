@@ -85,7 +85,7 @@
                             </div>
                             <div class="name-contact">
                                 <div class="name">{{ nameSelected }}</div>
-                                <div class="text-message">Ultimo accesso oggi alle {{ lastAccess }}</div>
+                                <div class="text-message">Ultimo accesso oggi alle {{ hourMessageSent }}</div>
                             </div>
                         </div>
                         <div class="tool">
@@ -97,13 +97,24 @@
 
                     <div class="messages">
 
-                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'box-message' ">
-                            <div v-for="text in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
+                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message" :id="cloneMessaggi[index].messageDeleted ? 'hidden' : '' ">
                                 {{text.message}}
 
                                 <div class="time">
                                     {{text.date}}
                                 </div> 
+
+                                <div class="menu" v-if="cloneMessaggi[index].menuOpened">
+                                    <div class="option info">
+                                        Message info
+                                    </div>
+                                    <div class="option delete" @click="deleteMessage(index)">
+                                        Delete message
+                                    </div>
+                                </div>
+
+                                <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
                             </div>
                                 
                         </div>

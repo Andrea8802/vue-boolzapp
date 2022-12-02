@@ -175,7 +175,9 @@ createApp({
             textUser : "",
             searchContacts: "",
             hour: [],
-            lastAccess: ""
+            hourMessageSent: "",
+            cloneMessaggi: "",
+            activeCounter: 0
         }
     },
     methods:{
@@ -196,25 +198,32 @@ createApp({
             // Impostiamo il nome al cambio contatto
             this.nameSelected = this.contacts[i].name;
 
-            this.lastAccess = this.hour[i];
+            // Aggiornaimo ultimo accesso
+            this.hourMessageSent = this.hour[i];
+
+            // Chiudiamo tutti i menù aperti
+            this.cloneMessaggi.forEach(messages => {
+                messages.menuOpened = false;
+            });
             
         },
 
         // Messaggio inviato
         textSended(){
-            
+            this.cloneMessaggi.push({date: this.hourMessageSent, message: this.textUser, status: "sent"})
+            this.cloneMessaggi.push({date: this.hourMessageSent, message: "ok", status: "received"})
             // Settiamo la data e l'ora
             let genDate = new Date()
-            let dataInvio = `${genDate.getDay()}/${genDate.getMonth()}/${genDate.getFullYear()} ${genDate.getHours()}:${genDate.getMinutes()}:${genDate.getSeconds()}`
-            let orarioInvio = `${genDate.getHours()}:${genDate.getMinutes()}`
-            this.lastAccess = orarioInvio;
+
+            // Salviamo orario invio messaggio
+            this.hourMessageSent  = `${genDate.getHours()}:${genDate.getMinutes()}`
             
             this.contacts.forEach((element, index) => {
                 if (element.selected){
-                    element.messages.push({date:orarioInvio, message: this.textUser, status: "sent"});
-                    setTimeout(()=> element.messages.push({date:orarioInvio, message: "ok", status: "received"}), 1000);
+                    element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
+                    setTimeout(()=> element.messages.push({date: this.hourMessageSent, message: "ok", status: "received"}), 1000);
 
-                    this.hour.splice([index], 1, this.lastAccess);
+                    this.hour.splice([index], 1, this.hourMessageSent);
 
                 }
                 document.querySelector(".messages").scrollBy(0, 200);
@@ -235,6 +244,40 @@ createApp({
 
                 }
             });
+        },
+
+        // Aprire menù chat
+        openMenu(index){
+            // Condizione che verifica che non ci siano più di 1 menù aperto --DEBUG--
+            if (this.activeCounter > 0){
+                this.cloneMessaggi.forEach(messages => {
+                    messages.menuOpened = false
+                    this.activeCounter = 0;
+                });
+
+            } else{
+                this.activeCounter++
+                // Condizione cha fa attivare o disattivare i menù
+                if (this.cloneMessaggi[index].menuOpened){
+                    this.cloneMessaggi[index].menuOpened = false;
+    
+                } else{
+                    this.cloneMessaggi[index].menuOpened = true;
+                }
+            }  
+            
+        },
+        
+        deleteMessage(index){
+           this.cloneMessaggi[index].messageDeleted = true; // Potrebbe non servire           
+            this.contacts.forEach((element, i) => {
+                if (element.visible){
+                    this.contacts[i].messages.splice([index], 1)
+
+                }
+
+            });
+            console.log(this.contacts[0].messages);
         }
 
     },
@@ -252,14 +295,30 @@ createApp({
 
 
         this.nameSelected = this.contacts[0].name;
-        let lunghezza
+
         this.contacts.forEach(element => {
-           lunghezza = element.messages.length
-            this.hour.push(element.messages[lunghezza - 1].date)
+            this.hour.push(element.messages[element.messages.length - 1].date)
         });
 
-        this.lastAccess = this.hour[0];
+        this.invioMessaggio = this.hour[0];
 
+        //  Clonazione array "messages" dentro "contacts"
+        this.contacts.forEach(element => {
+                this.cloneMessaggi = [...element.messages]
+                
+        });
+
+        // Aggiunto valore per aprire menù
+        this.cloneMessaggi.forEach(messages => {
+            messages.menuOpened = false;
+        });
+
+        this.cloneMessaggi.forEach(messages => {
+            messages.messageDeleted = false;
+        });
+
+        console.log(this.contacts[0].messages);
     }
+
 
 }).mount("#app");

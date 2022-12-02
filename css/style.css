@@ -13,6 +13,14 @@ i{
     cursor: pointer;
 }
 
+#hidden{
+    display: none !important;
+}
+
+.hiddenClass{
+    display: none !important;
+}
+
 /* Background Rules */
 .background{
     position: relative;
@@ -266,6 +274,41 @@ i{
                         z-index: 500;
                     }
 
+                    .right .message .menu{
+                        position: absolute;
+                        bottom: -63px;
+                        right: 0px;
+                        z-index: 501;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        background-color: white;
+                        height: 80px;
+                        width: 130px;
+                        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+                        opacity: 1;
+                        transition: all 2s ease;
+                       
+                    }
+
+                        .right .menu .option{
+                            padding: 12px 20px;
+                            cursor: pointer;
+
+                        }
+
+                            .right .menu .option:hover{
+                                background-color: lightgray;
+                            }
+
+                        .btn-menu{
+                            position: absolute;
+                            top: 5px;
+                            right: 8px;
+                            font-size: 16px;
+                            color: gray;
+                        }
+
        
 
     .right .input-section{
@@ -300,6 +343,4 @@ i{
         font-size: 20px;
     }
 
-    #hidden{
-        display: none !important;
-    }
+    
