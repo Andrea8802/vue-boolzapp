@@ -19,9 +19,6 @@
 
         <div class="background">
 
-            <!-- Background Sopra -->
-            <div class="top"></div>
-    
             <!-- Container Centrale -->
             <div class="container">
 
@@ -29,6 +26,8 @@
                 <section class="left">
                     
                     <header>
+
+                        <!-- Info utente -->
                         <div class="profile">
                             <img src="img/avatar_io.jpg" alt="Image Profile" class="image-profile">
                             <span class="profile-name">Sofia</span>
@@ -42,6 +41,7 @@
 
                     </header>
 
+                    <!-- Attiva Notifiche Desktop -->
                     <div class="notification">
                         <i class="fa-solid fa-bell-slash"></i>
                         <span>
@@ -50,21 +50,29 @@
                         </span>
                     </div>
 
+                    <!-- Ricerca utenti -->
                     <div class="search">
                         <input type="search" id="search-contacts" placeholder="Cerca o inizia una nuova chat" v-model="searchContacts" @KeyUp="searchingContacts">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
 
+                    <!-- Lista contatti -->
                     <div class="chats">
 
-                        <div v-for="(chat, index) in contacts" :class="contacts[index].selected ? selectedClass : '' " :id="contacts[index].visible ? '' : 'hidden' " class="chat" @click="contactSelected(index)">
+                        <!-- Generazione lista contatti -->
+                        <div v-for="(chat, index) in contacts" 
+                        :class="contacts[index].selected ? selectedClass : '' " 
+                        :id="contacts[index].visible ? '' : 'hidden' "
+                        class="chat" 
+                        @click="contactSelected(index)">
+
                             <div class="image-contact">
                                 <img :src=" 'img/avatar' + contacts[index].avatar + '.jpg' " alt="Contact Image Profile 1" class="image-profile">
                             </div>
 
                             <div class="name-contact">
                                 <div class="name">{{ chat.name }}</div>
-                                <div class="text-message">Ultimo messaggio inviato</div>
+                                <div class="text-message">{{lastMessage[index]}}</div>
                             </div>
 
                             <div class="time">
@@ -79,6 +87,8 @@
                 <!-- Sezione Destra -->
                 <section class="right">
                     <header>
+
+                        <!-- Info utente attivo -->
                         <div class="info-chat">
                             <div class="image-contact">
                                 <img :src="'img/avatar' + contacts[this.IndexUserACtive].avatar + '.jpg'" alt="Contact Image Profile 1" class="image-profile">
@@ -88,6 +98,7 @@
                                 <div class="text-message">Ultimo accesso oggi alle {{ hour[this.IndexUserACtive] }}</div>
                             </div>
                         </div>
+
                         <div class="tool">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <i class="fa-solid fa-paperclip"></i>
@@ -96,42 +107,46 @@
                     </header>
 
 
-                        <div class="messages">
+                    <!-- Box Messaggi -->
+                    <div class="messages">
 
-                            <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
-                                <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
-                                    {{text.message}}
+                        <!-- Generazione messaggi -->
+                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
+                            <!-- Generazione messaggi 2 e divisione fra inviati e ricevuti -->
+                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                                {{text.message}}
 
-                                    <div class="time">
-                                        {{text.date}}
-                                    </div> 
+                                <div class="time">
+                                    {{text.date}}
+                                </div> 
 
-                                    <div class="menu" v-if="cloneMessaggi[index].menuOpened">
-                                        <div class="option info">
-                                            Message info
-                                        </div>
-                                        <div class="option delete" @click="deleteMessage(index)">
-                                            Delete message
-                                        </div>
+                                <!-- Menu Option -->
+                                <div class="menu" v-if="cloneMessaggi[index].menuOpened">
+                                    <div class="option info">
+                                        Message info
                                     </div>
+                                    <div class="option delete" @click="deleteMessage(index)">
+                                        Delete message
+                                    </div>
+                                </div>
 
-                                    <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
-                                </div>      
-                            </div>
+                                <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
+                            </div>      
                         </div>
+                    </div>
 
-                    
+                    <!-- Sezione input text -->
                     <div class="input-section">
                         <i class="fa-regular fa-face-smile"></i>
-                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio" v-model="textUser" @KeyUp.enter="textSended">
-                        <i class="fa-solid fa-microphone"></i>
 
+                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio" v-model="textUser" @KeyUp.enter="textSended">
+
+                        <i class="fa-solid fa-microphone"></i>
                     </div>
                 </section>
             </div>
     
-            <!-- Background sotto -->
-            <div class="bottom"></div>
+            
         </div>
     </div>
 

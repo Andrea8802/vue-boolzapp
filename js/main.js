@@ -176,7 +176,10 @@ createApp({
             hourMessageSent: "",
             cloneMessaggi: "",
             activeCounter: 0,
-            IndexUserACtive: 0
+            IndexUserACtive: 0,
+            lastMessage: [],
+            scrollAutomatico:() => {let containerMessages = this.$el.querySelector(".messages")
+            containerMessages.scrollTop = containerMessages.scrollHeight}
         }
     },
     methods:{
@@ -231,15 +234,30 @@ createApp({
             // Aggiungiamo messaggi nell'oggetto originale
             this.contacts.forEach((element, index) => {
                 if (element.selected){
+                    // Push messaggio utente
                     element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
-                    setTimeout(()=> element.messages.push({date: this.hourMessageSent, message: "ok", status: "received"}), 1000);
+                    this.lastMessage.push(this.contacts[this.IndexUserACtive].messages)
 
+                    // Push e print del messaggio automatico
+                    setTimeout(()=> {
+                        element.messages.push({date: this.hourMessageSent, message: "ok", status: "received"})
+                        this.scrollAutomatico();
+                        this.lastMessage.splice(0, 1, element.messages[element.messages.length - 1].message)
+
+                    } ,1000);
+
+                    // Aggiornamento orario lista contatti
                     this.hour.splice([index], 1, this.hourMessageSent);
 
                 }
 
             });
 
+            // Aggiornamento ultimo messaggio lista conttatti
+            this.lastMessage.splice(0, 1, this.textUser);
+
+            this.scrollAutomatico();
+            
             this.textUser = "";
         },
 
@@ -294,8 +312,8 @@ createApp({
                 messages.menuOpened = false;
             });
 
+            this.activeCounter = 0;
         }
-
     },
     mounted(){ 
         
@@ -324,6 +342,10 @@ createApp({
             messages.menuOpened = false;
         });
 
+        // Aggiunto ultimo messaggio chat
+        this.contacts.forEach(element => {
+            this.lastMessage.push(element.messages[element.messages.length - 1].message)
+        });
     }
 
 
