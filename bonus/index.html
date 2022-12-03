@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <title>Boolzapp</title>
+</head>
+<body>
+    
+    <div id="app">
+
+        <div v-if="loadingPage" class="splash-page">
+            <i class="fa-solid fa-circle-notch"></i>
+            Caricamento in corso...
+        </div>
+
+        <div v-else="" class="background" :class="darkMode ? 'dark-mode' : '' ">
+
+            <!-- Container Centrale -->
+            <div class="container">
+
+                <!-- Sezione sinistra -->
+                <section class="left">
+                    
+                    <header>
+
+                        <!-- Info utente -->
+                        <div class="profile">
+                            <img src="img/avatar_io.jpg" alt="Image Profile" class="image-profile">
+                            <span class="profile-name">Sofia</span>
+                        </div>
+
+                        <div class="tool">
+                            <!-- Dark Mode/Light Mode -->
+                            <i v-if="darkMode" class="fa-solid fa-sun" @click="toggleDarkMode"></i>
+                            <i v-else="" class="fa-solid fa-moon" @click="toggleDarkMode"></i>
+
+                            <i class="fa-solid fa-circle-notch"></i>
+                            <i class="fa-solid fa-message"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+
+                    </header>
+
+                    <!-- Attiva Notifiche Desktop -->
+                    <div class="notification">
+                        <i class="fa-solid fa-bell-slash"></i>
+                        <span>
+                            <div>Ricevi notifiche di nuovi messaggi</div>
+                            <a href="#">Attiva notifiche desktop</a>
+                        </span>
+                    </div>
+
+                    <!-- Ricerca utenti -->
+                    <div class="search">
+                        <input type="search" id="search-contacts" placeholder="Cerca o inizia una nuova chat" v-model="searchContacts" @KeyUp="searchingContacts">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+
+                    <!-- Lista contatti -->
+                    <div class="chats">
+
+                        <!-- Generazione lista contatti -->
+                        <div v-for="(chat, index) in contacts" 
+                        :class="contacts[index].selected ? 'selectedContact' : '' " 
+                        :id="contacts[index].visible ? '' : 'hidden' "
+                        class="chat" 
+                        @click="contactSelected(index)">
+
+                            <div class="image-contact">
+                                <img :src=" 'img/avatar' + contacts[index].avatar + '.jpg' " alt="Contact Image Profile 1" class="image-profile">
+                            </div>
+
+                            <div class="name-contact">
+                                <div class="name">{{ chat.name }}</div>
+                                <div class="text-message">{{lastMessage[index]}}</div>
+                            </div>
+
+                            <div class="time">
+                                {{ hour[index] }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                </section>
+    
+                <!-- Sezione Destra -->
+                <section class="right">
+                    <div v-if="welcomeShow" class="welcome">
+                        <div class="text">
+                            Benventuto/a su Boolzapp! <br>
+                            Scegli un contatto per iniziare a chattare!
+                        </div>
+                    </div>
+                    <header>
+
+                        <!-- Info utente attivo -->
+                        <div class="info-chat">
+                            <div class="image-contact">
+                                <img :src="'img/avatar' + contacts[this.IndexUserACtive].avatar + '.jpg'" alt="Contact Image Profile 1" class="image-profile">
+                            </div>
+                            <div class="name-contact">
+                                <div class="name">{{ this.contacts[IndexUserACtive].name }}</div>
+                                
+                                <div v-if="writing" class="text-message">Sta Scrivendo..</div>
+                                <div v-else class="text-message">Ultimo accesso oggi alle {{ hour[this.IndexUserACtive] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="tool">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <i class="fa-solid fa-paperclip"></i>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                        </div>
+                    </header>
+
+
+                    <!-- Box Messaggi -->
+                    <div class="messages">
+
+                        <!-- Generazione messaggi -->
+                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
+                            <!-- Generazione messaggi 2 e divisione fra inviati e ricevuti -->
+                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                                {{text.message}}
+
+                                <div class="time">
+                                    {{text.date}}
+                                </div> 
+
+                                <!-- Menu Option -->
+                                <div class="menu" v-if="cloneMessaggi[index].menuOpened">
+                                    <div class="option info">
+                                        Message info
+                                    </div>
+                                    <div class="option delete" @click="deleteMessage(index)">
+                                        Delete message
+                                    </div>
+                                </div>
+
+                                <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
+                            </div>      
+                        </div>
+                    </div>
+
+                    <!-- Sezione input text -->
+                    <div class="input-section">
+                        <i class="fa-regular fa-face-smile"></i>
+
+                        <input type="text" id="input-bar" placeholder="Scrivi un messaggio" v-model="textUser" @KeyUp="inputCheck"
+                        @KeyUp.enter="textSended">
+
+                        <i v-if="btnPlaneShow" class="fa-solid fa-paper-plane" @click="textSended"></i>
+                        <i v-else="" class="fa-solid fa-microphone"></i>
+                    </div>
+                </section>
+            </div>
+    
+            
+        </div>
+    </div>
+
+    
+    <!-- Script: Vue.js & main.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+
+</body>
+</html>

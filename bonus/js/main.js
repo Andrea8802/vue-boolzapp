@@ -167,8 +167,9 @@ createApp({
                 }
             ],
 
+            randomMessages: ["Hey", "Come Stai?", "Hai fatto la spesa?", "Domani esci in piazza?", "Quando compi gli anni?"],
+
             messageChat : [],
-            selectedClass : "selectedContact",
             hidden: "hidden",
             textUser : "",
             searchContacts: "",
@@ -178,8 +179,19 @@ createApp({
             activeCounter: 0,
             IndexUserACtive: 0,
             lastMessage: [],
-            scrollAutomatico:() => {let containerMessages = this.$el.querySelector(".messages")
-            containerMessages.scrollTop = containerMessages.scrollHeight}
+            btnPlaneShow: false,
+            writing: false,
+            welcomeShow: true,
+            loadingPage: true,
+            darkMode: true,
+            scrollAutomatico:() => 
+            {
+                let containerMessages = this.$el.querySelector(".messages")
+                containerMessages.scrollTop = containerMessages.scrollHeight
+            },
+            choiceRandomMessage: (min, max) => {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
         }
     },
     methods:{
@@ -216,14 +228,19 @@ createApp({
                 element.visible = true;
                 
             });
+
+            this.welcomeShow = false;
             
         },
 
         // Messaggio inviato
         textSended(){
+            if(this.textUser === "" || this.textUser === " ") return;
+
+            let numRandom = this.choiceRandomMessage(0, this.randomMessages.length - 1);
             // Aggiungiamo messaggi nell'oggetto clone
             this.cloneMessaggi.push({date: this.hourMessageSent, message: this.textUser, status: "sent"})
-            this.cloneMessaggi.push({date: this.hourMessageSent, message: "ok", status: "received"})
+            this.cloneMessaggi.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"})
 
             // Settiamo la data e l'ora
             let genDate = new Date()
@@ -234,15 +251,17 @@ createApp({
             // Aggiungiamo messaggi nell'oggetto originale
             this.contacts.forEach((element, index) => {
                 if (element.selected){
+                    this.writing = true;
                     // Push messaggio utente
                     element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
                     this.lastMessage.push(this.contacts[this.IndexUserACtive].messages)
 
                     // Push e print del messaggio automatico
                     setTimeout(()=> {
-                        element.messages.push({date: this.hourMessageSent, message: "ok", status: "received"})
+                        element.messages.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"})
                         this.scrollAutomatico();
-                        this.lastMessage.splice(0, 1, element.messages[element.messages.length - 1].message)
+                        this.lastMessage.splice([this.IndexUserACtive], 1, element.messages[element.messages.length - 1].message);
+                        this.writing = false;
 
                     } ,1000);
 
@@ -251,14 +270,18 @@ createApp({
 
                 }
 
+
             });
 
             // Aggiornamento ultimo messaggio lista conttatti
-            this.lastMessage.splice(0, 1, this.textUser);
+            this.lastMessage.splice([this.IndexUserACtive], 1, this.textUser);
 
             this.scrollAutomatico();
             
             this.textUser = "";
+
+            this.btnPlaneShow = false;
+
         },
 
         // Cerca contatto
@@ -313,8 +336,26 @@ createApp({
             });
 
             this.activeCounter = 0;
+        },
+
+        // Mostrare/Nascondere tasto "plane" per mandare messaggi
+        inputCheck(){
+            if(this.textUser != "" && this.textUser != " "){
+                this.btnPlaneShow = true;
+            } else{
+                this.btnPlaneShow = false;
+            }
+        },
+
+        toggleDarkMode(){
+            if(this.darkMode){
+                this.darkMode = false;
+            } else{
+                this.darkMode = true;
+            }
         }
     },
+
     mounted(){ 
         
         // Ciclo per mandare nell'html solo l'array "messages"
@@ -322,11 +363,8 @@ createApp({
             this.messageChat.push(this.contacts[i].messages)  
         }
 
-        // Impostiamo la prima chat come attiva
-        this.contacts[this.IndexUserACtive].selected = true;
 
-
-        // Aggiungiamo tutti le date su un array
+        // Aggiungiamo tutte le date su un array
         this.contacts.forEach(element => {
             this.hour.push(element.messages[element.messages.length - 1].date)
         });
@@ -346,6 +384,8 @@ createApp({
         this.contacts.forEach(element => {
             this.lastMessage.push(element.messages[element.messages.length - 1].message)
         });
+
+        setInterval(() => this.loadingPage = false, 1000)
     }
 
 
