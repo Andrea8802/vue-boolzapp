@@ -169,15 +169,14 @@ createApp({
 
             messageChat : [],
             selectedClass : "selectedContact",
-            hidden: "box-message",
-            imgSelected: "",
-            nameSelected : "",
+            hidden: "hidden",
             textUser : "",
             searchContacts: "",
             hour: [],
             hourMessageSent: "",
             cloneMessaggi: "",
-            activeCounter: 0
+            activeCounter: 0,
+            IndexUserACtive: 0
         }
     },
     methods:{
@@ -193,7 +192,7 @@ createApp({
             this.contacts[i].selected = true;
 
             // Impostiamo l'immagine al cambio contatto
-            this.imgSelected =  "img/avatar" + this.contacts[i].avatar + ".jpg";
+            this.IndexUserACtive = i
 
             // Impostiamo il nome al cambio contatto
             this.nameSelected = this.contacts[i].name;
@@ -205,19 +204,31 @@ createApp({
             this.cloneMessaggi.forEach(messages => {
                 messages.menuOpened = false;
             });
+            this.activeCounter = 0;
+
+
+            // Reimpostiamo la ricerca
+            this.searchContacts = ""
+            this.contacts.forEach(element => {
+                element.visible = true;
+                
+            });
             
         },
 
         // Messaggio inviato
         textSended(){
+            // Aggiungiamo messaggi nell'oggetto clone
             this.cloneMessaggi.push({date: this.hourMessageSent, message: this.textUser, status: "sent"})
             this.cloneMessaggi.push({date: this.hourMessageSent, message: "ok", status: "received"})
+
             // Settiamo la data e l'ora
             let genDate = new Date()
 
             // Salviamo orario invio messaggio
             this.hourMessageSent  = `${genDate.getHours()}:${genDate.getMinutes()}`
             
+            // Aggiungiamo messaggi nell'oggetto originale
             this.contacts.forEach((element, index) => {
                 if (element.selected){
                     element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
@@ -226,10 +237,9 @@ createApp({
                     this.hour.splice([index], 1, this.hourMessageSent);
 
                 }
-                document.querySelector(".messages").scrollBy(0, 200);
 
             });
-            
+
             this.textUser = "";
         },
 
@@ -265,11 +275,12 @@ createApp({
                     this.cloneMessaggi[index].menuOpened = true;
                 }
             }  
+        
             
         },
         
-        deleteMessage(index){
-           this.cloneMessaggi[index].messageDeleted = true; // Potrebbe non servire           
+        // Eliminazione messaggio
+        deleteMessage(index){        
             this.contacts.forEach((element, i) => {
                 if (element.visible){
                     this.contacts[i].messages.splice([index], 1)
@@ -277,7 +288,12 @@ createApp({
                 }
 
             });
-            console.log(this.contacts[0].messages);
+
+            // Chiudiamo tutti i menù aperti
+            this.cloneMessaggi.forEach(messages => {
+                messages.menuOpened = false;
+            });
+
         }
 
     },
@@ -289,20 +305,15 @@ createApp({
         }
 
         // Impostiamo la prima chat come attiva
-        this.contacts[0].selected = true;
-
-        this.imgSelected =  "img/avatar" + this.contacts[0].avatar + ".jpg";
+        this.contacts[this.IndexUserACtive].selected = true;
 
 
-        this.nameSelected = this.contacts[0].name;
-
+        // Aggiungiamo tutti le date su un array
         this.contacts.forEach(element => {
             this.hour.push(element.messages[element.messages.length - 1].date)
         });
 
-        this.invioMessaggio = this.hour[0];
-
-        //  Clonazione array "messages" dentro "contacts"
+        //  Clonazione array "messages"
         this.contacts.forEach(element => {
                 this.cloneMessaggi = [...element.messages]
                 
@@ -313,11 +324,6 @@ createApp({
             messages.menuOpened = false;
         });
 
-        this.cloneMessaggi.forEach(messages => {
-            messages.messageDeleted = false;
-        });
-
-        console.log(this.contacts[0].messages);
     }
 
 

@@ -81,11 +81,11 @@
                     <header>
                         <div class="info-chat">
                             <div class="image-contact">
-                                <img :src="imgSelected" alt="Contact Image Profile 1" class="image-profile">
+                                <img :src="'img/avatar' + contacts[this.IndexUserACtive].avatar + '.jpg'" alt="Contact Image Profile 1" class="image-profile">
                             </div>
                             <div class="name-contact">
-                                <div class="name">{{ nameSelected }}</div>
-                                <div class="text-message">Ultimo accesso oggi alle {{ hourMessageSent }}</div>
+                                <div class="name">{{ this.contacts[IndexUserACtive].name }}</div>
+                                <div class="text-message">Ultimo accesso oggi alle {{ hour[this.IndexUserACtive] }}</div>
                             </div>
                         </div>
                         <div class="tool">
@@ -95,32 +95,31 @@
                         </div>
                     </header>
 
-                    <div class="messages">
 
-                        <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
-                            <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message" :id="cloneMessaggi[index].messageDeleted ? 'hidden' : '' ">
-                                {{text.message}}
+                        <div class="messages">
 
-                                <div class="time">
-                                    {{text.date}}
-                                </div> 
+                            <div v-for="(element, i) in messageChat" :class="contacts[i].selected ? '' : 'hiddenClass' ">
+                                <div v-for="(text, index) in element" :class="text.status === 'received' ? 'received' : 'sent' " class="message">
+                                    {{text.message}}
 
-                                <div class="menu" v-if="cloneMessaggi[index].menuOpened">
-                                    <div class="option info">
-                                        Message info
+                                    <div class="time">
+                                        {{text.date}}
+                                    </div> 
+
+                                    <div class="menu" v-if="cloneMessaggi[index].menuOpened">
+                                        <div class="option info">
+                                            Message info
+                                        </div>
+                                        <div class="option delete" @click="deleteMessage(index)">
+                                            Delete message
+                                        </div>
                                     </div>
-                                    <div class="option delete" @click="deleteMessage(index)">
-                                        Delete message
-                                    </div>
-                                </div>
 
-                                <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
+                                    <i class="fa-solid fa-angle-down btn-menu" @click="openMenu(index)"></i>
+                                </div>      
                             </div>
-                                
                         </div>
-                        
 
-                    </div>
                     
                     <div class="input-section">
                         <i class="fa-regular fa-face-smile"></i>
