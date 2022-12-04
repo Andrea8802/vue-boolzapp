@@ -297,12 +297,7 @@ createApp({
                     setTimeout(()=>{
                         this.onlineMode = false;
                     },8000)
-
-                    
-
                 }
-
-
             });
 
             // Aggiornamento ultimo messaggio lista conttatti
@@ -349,13 +344,15 @@ createApp({
         },
         
         // Eliminazione messaggio
-        deleteMessage(index){        
+        deleteMessage(index){      
+            
+            // Eliminazione messaggio
             this.contacts[this.IndexUserACtive].messages.splice([index], 1)
 
-
             // Chiusura menù aperti
-            this.contacts.forEach(element => {
-                element.messages.menuOpened = false;
+            this.checkMenuArr.forEach(messages => {
+                messages.menuOpened = false
+                
             });
 
             this.activeMenuCounter = 0;

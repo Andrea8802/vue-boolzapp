@@ -42,7 +42,7 @@ i{
 
     
 
-/* Wrap Class */
+/* Wrap Dark Mode Class */
 .dark-mode{
     filter: invert(1);
     animation: darkMode 0.7s linear;
@@ -60,6 +60,14 @@ i{
 .dark-mode .right .menu{
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2) !important;
 }
+
+.dark-mode .left .notification{
+    background-color: white;
+}
+
+    .dark-mode .left .notification i, .dark-mode .left .notification a{
+        color: gray;
+    }
 
 /* Background Rules */
 .background{
@@ -177,6 +185,10 @@ i{
     .left .notification a{
         color: #598499;
     }
+
+        .left .notification a:hover{
+            color: #325060;
+        }   
 
     .left .search{
         height: 40px;
