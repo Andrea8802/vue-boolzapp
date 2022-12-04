@@ -298,14 +298,9 @@ createApp({
         },
         
         // Eliminazione messaggio
-        deleteMessage(index){        
-            this.contacts.forEach((element, i) => {
-                if (element.visible){
-                    this.contacts[i].messages.splice([index], 1)
+        deleteMessage(index){     
 
-                }
-
-            });
+            this.contacts[this.IndexUserACtive].messages.splice([index], 1)
 
             // Chiudiamo tutti i menù aperti
             this.cloneMessaggi.forEach(messages => {

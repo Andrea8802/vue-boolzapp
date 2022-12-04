@@ -28,7 +28,7 @@
             <div class="container">
 
                 <!-- Sezione sinistra -->
-                <section class="left">
+                <section class="left" :class="!chatOpen ? 'mobile-version' : 'hidden-block'">
                     
                     <header>
 
@@ -40,8 +40,8 @@
 
                         <div class="tool">
                             <!-- Dark Mode/Light Mode -->
-                            <i v-if="darkMode" class="fa-solid fa-sun" @click="toggleDarkMode"></i>
-                            <i v-else="" class="fa-solid fa-moon" @click="toggleDarkMode"></i>
+                            <i v-if="darkMode" class="fa-solid fa-sun switch-dark-mode" @click="toggleDarkMode"></i>
+                            <i v-else="" class="fa-solid fa-moon switch-dark-mode" @click="toggleDarkMode"></i>
 
                             <i class="fa-solid fa-circle-notch"></i>
                             <i class="fa-solid fa-message"></i>
@@ -71,7 +71,7 @@
                         <!-- Generazione lista contatti -->
                         <div v-for="(chat, index) in contacts" 
                         :class="contacts[index].selected ? 'selectedContact' : '' " 
-                        :id="contacts[index].visible ? '' : 'hidden' "
+                        :id="contacts[index].visible ? '' : 'hidden-block' "
                         class="chat" 
                         @click="contactSelected(index)">
 
@@ -94,7 +94,7 @@
                 </section>
     
                 <!-- Sezione Destra -->
-                <section class="right">
+                <section class="right" :class="chatOpen ? 'mobile-version' : 'hidden-block'">
                     <div v-if="welcomeShow" class="welcome">
                         <div class="text">
                             Benventuto/a su Boolzapp! <br>
@@ -102,9 +102,10 @@
                         </div>
                     </div>
                     <header>
-
                         <!-- Info utente attivo -->
                         <div class="info-chat">
+                            <i class="fa-solid fa-circle-arrow-left arrow-left" @click="closeChat"></i>
+
                             <div class="image-contact">
                                 <img :src="'img/avatar' + contacts[this.IndexUserACtive].avatar + '.jpg'" alt="Contact Image Profile 1" class="image-profile">
                             </div>
@@ -112,6 +113,7 @@
                                 <div class="name">{{ this.contacts[IndexUserACtive].name }}</div>
                                 
                                 <div v-if="writing" class="text-message">Sta Scrivendo..</div>
+                                <div v-else-if="onlineMode" class="text-message">Online</div>
                                 <div v-else class="text-message">Ultimo accesso oggi alle {{ hour[this.IndexUserACtive] }}</div>
                             </div>
                         </div>

@@ -183,7 +183,9 @@ createApp({
             writing: false,
             welcomeShow: true,
             loadingPage: true,
-            darkMode: true,
+            darkMode: false,
+            chatOpen: false,
+            onlineMode: false,
             scrollAutomatico:() => 
             {
                 let containerMessages = this.$el.querySelector(".messages")
@@ -230,6 +232,8 @@ createApp({
             });
 
             this.welcomeShow = false;
+
+            this.chatOpen = true;
             
         },
 
@@ -251,19 +255,32 @@ createApp({
             // Aggiungiamo messaggi nell'oggetto originale
             this.contacts.forEach((element, index) => {
                 if (element.selected){
+                    // Impostare stato contatto su online
                     this.writing = true;
+
                     // Push messaggio utente
                     element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
                     this.lastMessage.push(this.contacts[this.IndexUserACtive].messages)
 
-                    // Push e print del messaggio automatico
+                    
                     setTimeout(()=> {
-                        element.messages.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"})
+                        // Push messaggio
+                        element.messages.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"});
+
                         this.scrollAutomatico();
+
+                        // Print ultimo messaggio
                         this.lastMessage.splice([this.IndexUserACtive], 1, element.messages[element.messages.length - 1].message);
+                        
                         this.writing = false;
+                        this.onlineMode = true;
 
                     } ,1000);
+
+                    setTimeout(()=>{
+                        this.onlineMode = false;
+
+                    },4000)
 
                     // Aggiornamento orario lista contatti
                     this.hour.splice([index], 1, this.hourMessageSent);
@@ -322,13 +339,8 @@ createApp({
         
         // Eliminazione messaggio
         deleteMessage(index){        
-            this.contacts.forEach((element, i) => {
-                if (element.visible){
-                    this.contacts[i].messages.splice([index], 1)
+            this.contacts[this.IndexUserACtive].messages.splice([index], 1)
 
-                }
-
-            });
 
             // Chiudiamo tutti i menù aperti
             this.cloneMessaggi.forEach(messages => {
@@ -336,6 +348,7 @@ createApp({
             });
 
             this.activeCounter = 0;
+
         },
 
         // Mostrare/Nascondere tasto "plane" per mandare messaggi
@@ -347,12 +360,18 @@ createApp({
             }
         },
 
+        // Switchare fra dark e light mode
         toggleDarkMode(){
             if(this.darkMode){
                 this.darkMode = false;
             } else{
                 this.darkMode = true;
             }
+        },
+
+        // Controllare se chat è stata aperta (SOLO MOBILE)
+        closeChat(){
+            this.chatOpen = false;
         }
     },
 
@@ -385,6 +404,7 @@ createApp({
             this.lastMessage.push(element.messages[element.messages.length - 1].message)
         });
 
+        // Disattivazione splash page
         setInterval(() => this.loadingPage = false, 1000)
     }
 
