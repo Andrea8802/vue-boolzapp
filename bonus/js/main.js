@@ -175,8 +175,8 @@ createApp({
             searchContacts: "",
             hour: [],
             hourMessageSent: "",
-            cloneMessaggi: "",
-            activeCounter: 0,
+            checkMenuArr: "",
+            activeMenuCounter: 0,
             IndexUserACtive: 0,
             lastMessage: [],
             btnPlaneShow: false,
@@ -191,7 +191,7 @@ createApp({
                 let containerMessages = this.$el.querySelector(".messages")
                 containerMessages.scrollTop = containerMessages.scrollHeight
             },
-            choiceRandomMessage: (min, max) => {
+                choiceRandomMessage: (min, max) => {
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
         }
@@ -218,10 +218,10 @@ createApp({
             this.hourMessageSent = this.hour[i];
 
             // Chiudiamo tutti i menù aperti
-            this.cloneMessaggi.forEach(messages => {
+            this.checkMenuArr.forEach(messages => {
                 messages.menuOpened = false;
             });
-            this.activeCounter = 0;
+            this.activeMenuCounter = 0;
 
 
             // Reimpostiamo la ricerca
@@ -231,8 +231,10 @@ createApp({
                 
             });
 
+            // Mostrare schermata welcome
             this.welcomeShow = false;
 
+            // Controllare se la chat è stata aperta (SOLO MOBILE)
             this.chatOpen = true;
             
         },
@@ -241,30 +243,42 @@ createApp({
         textSended(){
             if(this.textUser === "" || this.textUser === " ") return;
 
-            let numRandom = this.choiceRandomMessage(0, this.randomMessages.length - 1);
-            // Aggiungiamo messaggi nell'oggetto clone
-            this.cloneMessaggi.push({date: this.hourMessageSent, message: this.textUser, status: "sent"})
-            this.cloneMessaggi.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"})
-
             // Settiamo la data e l'ora
             let genDate = new Date()
 
             // Salviamo orario invio messaggio
             this.hourMessageSent  = `${genDate.getHours()}:${genDate.getMinutes()}`
+
+            // Funzione per richiedere una parola casuale dall'array e aggiunta alla variabile
+            let numRandom = this.choiceRandomMessage(0, this.randomMessages.length - 1);
+            
+            // Aggiungiamo messaggi nell'oggetto clone
+            this.checkMenuArr.push({date: this.hourMessageSent, message: this.textUser, status: "sent"}, {date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"});
             
             // Aggiungiamo messaggi nell'oggetto originale
             this.contacts.forEach((element, index) => {
                 if (element.selected){
-                    // Impostare stato contatto su online
-                    this.writing = true;
+                    
 
                     // Push messaggio utente
                     element.messages.push({date: this.hourMessageSent, message: this.textUser, status: "sent"});
+
+                    // Aggiunto come ultimo messaggio per anteprima contatto
                     this.lastMessage.push(this.contacts[this.IndexUserACtive].messages)
 
-                    
+                    // Impostare stato contatto su online
+                    setTimeout(() =>{
+                        this.onlineMode = true;
+                    }, 2000)
+
+                    // Impostare stato contatto su "Sta Scrivendo.."
+                    setTimeout(()=>{
+                        this.writing = true;
+
+                    }, 4000)
+
                     setTimeout(()=> {
-                        // Push messaggio
+                        // Push messaggio contatto
                         element.messages.push({date: this.hourMessageSent, message: this.randomMessages[numRandom], status: "received"});
 
                         this.scrollAutomatico();
@@ -272,18 +286,19 @@ createApp({
                         // Print ultimo messaggio
                         this.lastMessage.splice([this.IndexUserACtive], 1, element.messages[element.messages.length - 1].message);
                         
+                        // Aggiornamento orario lista contatti e info utente chat ativa
+                        this.hour.splice([index], 1, this.hourMessageSent);
+
                         this.writing = false;
-                        this.onlineMode = true;
 
-                    } ,1000);
+                    } ,6000);
 
+                    // Rimuovere stato online
                     setTimeout(()=>{
                         this.onlineMode = false;
+                    },8000)
 
-                    },4000)
-
-                    // Aggiornamento orario lista contatti
-                    this.hour.splice([index], 1, this.hourMessageSent);
+                    
 
                 }
 
@@ -317,23 +332,19 @@ createApp({
         // Aprire menù chat
         openMenu(index){
             // Condizione che verifica che non ci siano più di 1 menù aperto --DEBUG--
-            if (this.activeCounter > 0){
-                this.cloneMessaggi.forEach(messages => {
+            if (this.activeMenuCounter > 0){
+                this.checkMenuArr.forEach(messages => {
                     messages.menuOpened = false
-                    this.activeCounter = 0;
+                    this.activeMenuCounter = 0;
                 });
 
             } else{
-                this.activeCounter++
+                this.activeMenuCounter++
+
                 // Condizione cha fa attivare o disattivare i menù
-                if (this.cloneMessaggi[index].menuOpened){
-                    this.cloneMessaggi[index].menuOpened = false;
-    
-                } else{
-                    this.cloneMessaggi[index].menuOpened = true;
-                }
+                this.checkMenuArr[index].menuOpened ? this.checkMenuArr[index].menuOpened = false :  this.checkMenuArr[index].menuOpened = true
             }  
-        
+    
             
         },
         
@@ -342,12 +353,12 @@ createApp({
             this.contacts[this.IndexUserACtive].messages.splice([index], 1)
 
 
-            // Chiudiamo tutti i menù aperti
-            this.cloneMessaggi.forEach(messages => {
-                messages.menuOpened = false;
+            // Chiusura menù aperti
+            this.contacts.forEach(element => {
+                element.messages.menuOpened = false;
             });
 
-            this.activeCounter = 0;
+            this.activeMenuCounter = 0;
 
         },
 
@@ -377,35 +388,27 @@ createApp({
 
     mounted(){ 
         
-        // Ciclo per mandare nell'html solo l'array "messages"
-        for (let i = 0; i < this.contacts.length; i++) {
-            this.messageChat.push(this.contacts[i].messages)  
-        }
+        this.contacts.forEach(element =>{
+            
+             // Ciclo per mandare nell'html solo l'array "messages"
+            this.messageChat.push(element.messages)
 
-
-        // Aggiungiamo tutte le date su un array
-        this.contacts.forEach(element => {
+            // Aggiunte tutte le date su un array
             this.hour.push(element.messages[element.messages.length - 1].date)
-        });
 
-        //  Clonazione array "messages"
-        this.contacts.forEach(element => {
-                this.cloneMessaggi = [...element.messages]
-                
-        });
+            //  Clonazione array "messages" per gestire menu aperti
+            this.checkMenuArr = [...element.messages]
 
-        // Aggiunto valore per aprire menù
-        this.cloneMessaggi.forEach(messages => {
-            messages.menuOpened = false;
-        });
+            // Settaggio su false tutti i menu
+            element.messages.menuOpened = false
 
-        // Aggiunto ultimo messaggio chat
-        this.contacts.forEach(element => {
+            // Aggiunto ultimo messaggio chat
             this.lastMessage.push(element.messages[element.messages.length - 1].message)
-        });
+        })
 
         // Disattivazione splash page
         setInterval(() => this.loadingPage = false, 1000)
+
     }
 
 

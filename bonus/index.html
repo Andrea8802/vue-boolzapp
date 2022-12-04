@@ -71,7 +71,7 @@
                         <!-- Generazione lista contatti -->
                         <div v-for="(chat, index) in contacts" 
                         :class="contacts[index].selected ? 'selectedContact' : '' " 
-                        :id="contacts[index].visible ? '' : 'hidden-block' "
+                        :id="contacts[index].visible ? '' : 'hidden-contact' "
                         class="chat" 
                         @click="contactSelected(index)">
 
@@ -140,7 +140,7 @@
                                 </div> 
 
                                 <!-- Menu Option -->
-                                <div class="menu" v-if="cloneMessaggi[index].menuOpened">
+                                <div class="menu" v-if="checkMenuArr[index].menuOpened">
                                     <div class="option info">
                                         Message info
                                     </div>
